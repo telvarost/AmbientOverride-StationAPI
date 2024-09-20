@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "ambientoverride",
+  "version": "${version}",
+
+  "name": "AmbientOverride",
+  "description": "Handles fog, light levels, and other clientside features normally controlled by players giving them a unique spin.",
+  "authors": [
+    "Telvarost"
+  ],
+  "contact": {
+    "issues": "https://github.com/telvarost/AmbientOverride-StationAPI/issues",
+    "homepage": "https://github.com/telvarost/AmbientOverride-StationAPI/",
+    "sources": "https://github.com/telvarost/AmbientOverride-StationAPI/"
+  },
+
+  "license": "MIT",
+  "icon": "assets/ambientoverride/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+    ],
+    "stationapi:event_bus_client": [
+      "com.github.telvarost.ambientoverride.events.init.KeyBindingListener",
+      "com.github.telvarost.ambientoverride.events.KeyPressedListener"
+    ],
+    "stationapi:event_bus_server": [
+    ],
+    "gcapi": [
+      "com.github.telvarost.ambientoverride.Config"
+    ]
+  },
+  "mixins": [
+    "ambientoverride.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}
