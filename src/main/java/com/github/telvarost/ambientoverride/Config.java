@@ -9,7 +9,10 @@ public class Config {
 
     public static class ConfigFields {
 
-        @ConfigEntry(name = "Test", multiplayerSynced = true)
-        public Float test = 2.0F;
+        @ConfigEntry(name = "Enable Colored Fog")
+        public Boolean enableColoredFog = true;
+
+        @ConfigEntry(name = "Enable Dynamic Fog")
+        public Boolean enableDynamicFog = true;
     }
 }
