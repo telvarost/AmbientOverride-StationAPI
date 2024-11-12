@@ -1,17 +1,15 @@
 package com.github.telvarost.ambientoverride;
 
-import blue.endless.jankson.Comment;
-import net.glasslauncher.mods.api.gcapi.api.*;
+import net.glasslauncher.mods.gcapi3.api.*;
 
 public class Config {
 
-    @GConfig(value = "config", visibleName = "AmbientOverride")
+    @ConfigRoot(value = "config", visibleName = "AmbientOverride")
     public static ConfigFields config = new ConfigFields();
 
     public static class ConfigFields {
 
-        @ConfigName("Test")
-        @MultiplayerSynced
+        @ConfigEntry(name = "Test", multiplayerSynced = true)
         public Float test = 2.0F;
     }
 }
