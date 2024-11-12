@@ -92,6 +92,7 @@ public abstract class GameRendererMixin {
                 green = this.fogGreen;
                 blue = this.fogBlue;
             }
+
             if (0.0F == ModHelper.ModHelperFields.fogDensityMultiplier) {
                 GL11.glClearColor(red, green, blue, 0.0f);
                 ci.cancel();
