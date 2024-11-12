@@ -4,7 +4,6 @@
   "package": "com.github.telvarost.ambientoverride.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "OverworldDimensionMixin"
   ],
   "server": [
   ],
