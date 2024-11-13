@@ -13,9 +13,9 @@ public class ModHelper {
 //    }
 
     public static class ModHelperFields {
-        public static Float fogDensityMultiplier = 3.0F;
-        public static Float fogRedMultiplier     = 1.25F;
+        public static Float fogDensityMultiplier = 2.0F;
+        public static Float fogRedMultiplier     = 1.0F;
         public static Float fogGreenMultiplier   = 1.0F;
-        public static Float fogBlueMultiplier    = 0.75F;
+        public static Float fogBlueMultiplier    = 1.0F;
     }
 }

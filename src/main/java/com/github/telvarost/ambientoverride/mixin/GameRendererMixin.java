@@ -62,7 +62,7 @@ public abstract class GameRendererMixin {
             cancellable = true
     )
     private void clientsideEssentials_method_1852(float f, CallbackInfo ci) {
-        if (Config.config.enableColoredFog) {
+        if (Config.config.enableBiomeFogColors) {
             World level = this.client.world;
             LivingEntity living = this.client.camera;
             Vec3d vec3f = level.getSkyColor(this.client.camera, f);
@@ -106,7 +106,7 @@ public abstract class GameRendererMixin {
             cancellable = true
     )
     private void clientsideEssentials_updateSkyAndFogColors(float f, CallbackInfo ci) {
-        if (Config.config.enableColoredFog) {
+        if (Config.config.enableBiomeFogColors) {
             GL11.glClearColor(uniqueRed * ModHelper.ModHelperFields.fogRedMultiplier
                              , uniqueGreen * ModHelper.ModHelperFields.fogGreenMultiplier
                              , uniqueBlue * ModHelper.ModHelperFields.fogBlueMultiplier
@@ -120,7 +120,7 @@ public abstract class GameRendererMixin {
             cancellable = true
     )
     private void clientsideEssentials_updateFogColorBuffer(float red, float green, float blue, float i, CallbackInfoReturnable<FloatBuffer> cir) {
-        if (Config.config.enableColoredFog) {
+        if (Config.config.enableBiomeFogColors) {
             this.fogColorBuffer.clear();
             this.fogColorBuffer.put(red   * ModHelper.ModHelperFields.fogRedMultiplier  )
                                .put(green * ModHelper.ModHelperFields.fogGreenMultiplier)

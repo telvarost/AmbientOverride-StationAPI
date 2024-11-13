@@ -9,8 +9,11 @@ public class Config {
 
     public static class ConfigFields {
 
-        @ConfigEntry(name = "Enable Colored Fog")
-        public Boolean enableColoredFog = true;
+        @ConfigEntry(name = "Enable Biome Fog Colors")
+        public Boolean enableBiomeFogColors = true;
+
+        @ConfigEntry(name = "Enable Cave Depth Fog")
+        public Boolean enableCaveDepthFog = true;
 
         @ConfigEntry(name = "Enable Dynamic Fog")
         public Boolean enableDynamicFog = true;
