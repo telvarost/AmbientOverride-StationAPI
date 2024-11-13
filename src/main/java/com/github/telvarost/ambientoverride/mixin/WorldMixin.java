@@ -8,7 +8,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProperties;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.dimension.Dimension;
 import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,9 +20,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(World.class)
-public class WorldMixin {
+public abstract class WorldMixin {
 
     @Shadow protected WorldProperties properties;
+
+    @Shadow @Final public Dimension dimension;
 
     @Inject(
             method = "tick",
@@ -36,10 +41,48 @@ public class WorldMixin {
             PlayerEntity player = PlayerHelper.getPlayerFromGame();
             String biomeName = "Unknown";
             Biome biome = null;
+            int lightLevel = 0;
 
-            if (null != player.world) {
-                if (null != player.world.method_1781()) {
-                    biome = player.world.method_1781().getBiome((int)Math.floor(player.x), (int)Math.floor(player.z));
+            if (null != player) {
+                float light = player.getBrightnessAtEyes(1.0F);
+
+                if (light < 0.06) {
+                    lightLevel = 0;
+                } else if (light < 0.07) {
+                    lightLevel = 1;
+                } else if (light < 0.09) {
+                    lightLevel = 2;
+                } else if (light < 0.125) {
+                    lightLevel = 3;
+                } else if (light < 0.14) {
+                    lightLevel = 4;
+                } else if (light < 0.16) {
+                    lightLevel = 5;
+                } else if (light < 0.2) {
+                    lightLevel = 6;
+                } else if (light < 0.25) {
+                    lightLevel = 7;
+                } else if (light < 0.3) {
+                    lightLevel = 8;
+                } else if (light < 0.325) {
+                    lightLevel = 9;
+                } else if (light < 0.4) {
+                    lightLevel = 10;
+                } else if (light < 0.5) {
+                    lightLevel = 11;
+                } else if (light < 0.625) {
+                    lightLevel = 12;
+                } else if (light < 0.75) {
+                    lightLevel = 13;
+                } else if (light < 0.875) {
+                    lightLevel = 14;
+                } else {
+                    lightLevel = 15;
+                }
+                ModHelper.ModHelperFields.fogDensityMultiplier = 2.0F / (16 - lightLevel);
+
+                if (null != this.dimension.biomeSource) {
+                    biome = this.dimension.biomeSource.getBiome((int)Math.floor(player.x), (int)Math.floor(player.z));
                     if (null != biome) {
                         biomeName = biome.name;
                     }
