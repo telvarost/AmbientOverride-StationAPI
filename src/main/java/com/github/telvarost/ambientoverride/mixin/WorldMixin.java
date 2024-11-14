@@ -116,16 +116,16 @@ public abstract class WorldMixin {
                     ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F;
                     ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
                 } else if (Biome.SAVANNA == biome) { // + .4
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.1F;
+                    ModHelper.ModHelperFields.fogRedMultiplier = 1.2F;
                     ModHelper.ModHelperFields.fogGreenMultiplier = 1.2F;
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.1F;
+                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
                 } else if (Biome.SHRUBLAND == biome) { // + .8
                     ModHelper.ModHelperFields.fogRedMultiplier = 1.3F;
                     ModHelper.ModHelperFields.fogGreenMultiplier = 1.2F;
                     ModHelper.ModHelperFields.fogBlueMultiplier = 1.3F;
-                } else if (Biome.TAIGA == biome) { // + .7
+                } else if (Biome.TAIGA == biome) { // + .6
                     ModHelper.ModHelperFields.fogRedMultiplier = 1.1F;
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.2F;
+                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.1F;
                     ModHelper.ModHelperFields.fogBlueMultiplier = 1.4F;
                 } else if (Biome.DESERT == biome) { // + .6
                     ModHelper.ModHelperFields.fogRedMultiplier = 1.4F;
@@ -135,9 +135,9 @@ public abstract class WorldMixin {
                     ModHelper.ModHelperFields.fogRedMultiplier = 1.2F;
                     ModHelper.ModHelperFields.fogGreenMultiplier = 1.1F;
                     ModHelper.ModHelperFields.fogBlueMultiplier = 1.2F;
-                } else if (Biome.ICE_DESERT == biome) { // + 2.4
+                } else if (Biome.ICE_DESERT == biome) { // + 2.5
                     ModHelper.ModHelperFields.fogRedMultiplier = 1.7F;
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.7F;
+                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.8F;
                     ModHelper.ModHelperFields.fogBlueMultiplier = 2.0F;
                 } else if (Biome.TUNDRA == biome) { // + 1.1
                     ModHelper.ModHelperFields.fogRedMultiplier = 1.4F;
