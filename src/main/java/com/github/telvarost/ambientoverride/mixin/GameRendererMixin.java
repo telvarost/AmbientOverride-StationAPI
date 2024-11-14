@@ -45,6 +45,15 @@ public abstract class GameRendererMixin {
 
     @Unique private float uniqueBlue;
 
+    @Unique
+    private float getFogMultiplier() {
+        if (ModHelper.ModHelperFields.fogDensityMultiplier == 0F) {
+            return 100F;
+        } else {
+            return (1F - Math.min(ModHelper.ModHelperFields.fogDensityMultiplier, 0.95F)) * 2F;
+        }
+    }
+
     @Inject(method = "applyFog", at = @At(value = "HEAD"))
     public void clientsideEssentials_overrideFogDensity(int f, float par2, CallbackInfo ci) {
         uniqueRed = fogRed;
@@ -52,7 +61,7 @@ public abstract class GameRendererMixin {
         uniqueBlue = fogBlue;
 
         if (Config.config.enableDynamicFog) {
-            this.viewDistance = (256 >> this.client.options.viewDistance) * ModHelper.ModHelperFields.fogDensityMultiplier;
+            this.viewDistance = (256 >> this.client.options.viewDistance) * getFogMultiplier();
         }
     }
 
@@ -107,7 +116,7 @@ public abstract class GameRendererMixin {
     )
     private void clientsideEssentials_updateSkyAndFogColors(float f, CallbackInfo ci) {
         if (Config.config.enableBiomeFogColors) {
-            GL11.glClearColor(uniqueRed * ModHelper.ModHelperFields.fogRedMultiplier
+            GL11.glClearColor( uniqueRed * ModHelper.ModHelperFields.fogRedMultiplier
                              , uniqueGreen * ModHelper.ModHelperFields.fogGreenMultiplier
                              , uniqueBlue * ModHelper.ModHelperFields.fogBlueMultiplier
                              , 0.0f);
