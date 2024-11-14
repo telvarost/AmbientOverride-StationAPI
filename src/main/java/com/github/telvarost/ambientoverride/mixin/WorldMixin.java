@@ -69,6 +69,13 @@ public abstract class WorldMixin {
 
             float colorStrength = 0.5F  + random.nextFloat();
             float horrorFogStrength = random.nextFloat();
+            float caveFogStrength = random.nextFloat();
+            int caveFogDepthOffset = random.nextInt(9);
+
+            int morningFogChance = random.nextInt(3);
+            int morningFogStartTime = random.nextInt(10);
+            float morningFogStrength = random.nextFloat();
+            int morningFogDuration = random.nextInt(12 - morningFogStartTime) * 500;
 
             if (Config.config.enableBiomeFogColors) {
                 if (Biome.RAINFOREST == biome) { // + .2
@@ -136,18 +143,17 @@ public abstract class WorldMixin {
                 ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
             }
 
+            float caveFog = 1.0F;
             if (Config.config.enableCaveDepthFog) {
 
-                if (128.0 < depth) {
-                    depth = 128.0;
-                } else if (1.0 > depth) {
-                    depth = 1.0;
+                if ((64 - caveFogDepthOffset) > depth) {
+                    caveFog = (((float)depth - (32 - caveFogDepthOffset)) * ((float)depth - (32 - caveFogDepthOffset))) / 1024.0F;
                 }
 
                 //ModHelper.ModHelperFields.fogDensityMultiplier = 0.0F + ((float)(depth / 128.0F) * 1.0F);
             }
 
-            ModHelper.ModHelperFields.fogDensityMultiplier = 0.5F + (((1.0F / 4.0F) - (light / 4.0F)) * horrorFogStrength);
+            ModHelper.ModHelperFields.fogDensityMultiplier = 0.5F + (((1.0F / 4.0F) - (light / 4.0F)) * horrorFogStrength) + (((1.0F / 4.0F) - (caveFog / 4.0F)) * caveFogStrength);
 
             System.out.println("Day: " + currentDay + ", Time: " + currentTimeOfDay + ", Total: " + currentTime + ", Biome: " + biomeName);
         }
