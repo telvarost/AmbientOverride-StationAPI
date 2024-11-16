@@ -14,7 +14,7 @@ public class Config {
                 description = "Float value between 0.0 (0%) and 1.0 (100%)",
                 maxLength = 1
         )
-        public Float baseFogIntensity = 0.5F;
+        public Float baseFogIntensity = 0.4F;
 
         @ConfigEntry(name = "Biome Fog Colors Enabled")
         public Boolean enableBiomeFogColors = true;
