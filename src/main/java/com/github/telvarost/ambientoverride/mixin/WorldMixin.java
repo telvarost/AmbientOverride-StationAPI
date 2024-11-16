@@ -60,22 +60,17 @@ public abstract class WorldMixin {
                 depth = player.y;
 
                 if (null != this.dimension.biomeSource) {
-                    biome = this.dimension.biomeSource.getBiome((int)Math.floor(player.x), (int)Math.floor(player.z));
+                    biome = this.dimension.biomeSource.getBiome((int) Math.floor(player.x), (int) Math.floor(player.z));
                     if (null != biome) {
                         biomeName = biome.name;
                     }
                 }
             }
 
-            float colorStrength = 0.5F  + random.nextFloat();
+            float colorStrength = 0.5F + random.nextFloat();
             float horrorFogStrength = random.nextFloat();
             float caveFogStrength = random.nextFloat();
             int caveFogDepthOffset = random.nextInt(9);
-
-            int morningFogChance = random.nextInt(3);
-            int morningFogStartTime = random.nextInt(10);
-            float morningFogStrength = random.nextFloat();
-            int morningFogDuration = random.nextInt(12 - morningFogStartTime) * 500;
 
             if (Config.config.enableBiomeFogColors) {
                 if (Biome.RAINFOREST == biome) { // + .2
@@ -135,9 +130,7 @@ public abstract class WorldMixin {
                     ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F;
                     ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
                 }
-            }
-            else
-            {
+            } else {
                 ModHelper.ModHelperFields.fogRedMultiplier = 1.0F;
                 ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F;
                 ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
@@ -147,15 +140,40 @@ public abstract class WorldMixin {
             if (Config.config.enableCaveDepthFog) {
 
                 if ((64 - caveFogDepthOffset) > depth) {
-                    caveFog = (((float)depth - (32 - caveFogDepthOffset)) * ((float)depth - (32 - caveFogDepthOffset))) / 1024.0F;
+                    caveFog = (((float) depth - (32 - caveFogDepthOffset)) * ((float) depth - (32 - caveFogDepthOffset))) / 1024.0F;
                 }
 
                 //ModHelper.ModHelperFields.fogDensityMultiplier = 0.0F + ((float)(depth / 128.0F) * 1.0F);
             }
 
-            ModHelper.ModHelperFields.fogDensityMultiplier = 0.5F + (((1.0F / 4.0F) - (light / 4.0F)) * horrorFogStrength) + (((1.0F / 4.0F) - (caveFog / 4.0F)) * caveFogStrength);
+            int morningFogChance = random.nextInt(3);
+            long morningFogStartTime = 20000L;//((20000L + random.nextInt(6000)) % 24000L);
+            long offsetMorningFogStartTime = (12000L < morningFogStartTime) ? (morningFogStartTime - 24000L) : morningFogStartTime;
+            long offsetCurrentTimeOfDay = (12000L < currentTimeOfDay) ? (currentTimeOfDay - 24000L) : currentTimeOfDay;
+            long morningFogDuration = 6000L;//random.nextInt(6000) + 1000L;
+            float morningFog = 0.0F;
+            float morningFogStrength = 1.0F;//random.nextFloat();
 
-            System.out.println("Day: " + currentDay + ", Time: " + currentTimeOfDay + ", Total: " + currentTime + ", Biome: " + biomeName);
+            if (  offsetCurrentTimeOfDay >= offsetMorningFogStartTime
+               && offsetCurrentTimeOfDay < (offsetMorningFogStartTime + 1000L)
+            ) {
+                morningFog = (float) (offsetCurrentTimeOfDay - offsetMorningFogStartTime) / 1000;
+            } else if (  offsetCurrentTimeOfDay >= (offsetMorningFogStartTime + 1000L)
+                      && offsetCurrentTimeOfDay <  (offsetMorningFogStartTime + morningFogDuration)
+            ) {
+                morningFog = 1.0F;
+            } else if (  offsetCurrentTimeOfDay >= (offsetMorningFogStartTime + morningFogDuration)
+                      && offsetCurrentTimeOfDay <  (offsetMorningFogStartTime + morningFogDuration + 1000L)
+            ) {
+                morningFog = (float) (1000 - (offsetCurrentTimeOfDay - (offsetMorningFogStartTime + morningFogDuration))) / 1000;
+            }
+
+            ModHelper.ModHelperFields.fogDensityMultiplier = 0.5F                                                    // Base Fog Value
+                                                           + 0//(((1.0F / 4.0F) - (light / 4.0F)) * horrorFogStrength)  // Horror Fog
+                                                           + 0//(((1.0F / 4.0F) - (caveFog / 4.0F)) * caveFogStrength)  // Cave Fog
+                                                           + (0.5F * morningFog) * morningFogStrength;               // Morning Fog
+
+            System.out.println("Day: " + currentDay + ", Time: " + offsetCurrentTimeOfDay + ", Start: " + offsetMorningFogStartTime + ", Biome: " + biomeName);
         }
     }
 
