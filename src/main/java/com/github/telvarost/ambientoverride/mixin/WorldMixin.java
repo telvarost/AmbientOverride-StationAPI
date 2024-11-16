@@ -32,7 +32,7 @@ public abstract class WorldMixin {
     @Shadow public Random random;
 
     /** - Initialize daily fog values */
-    @Unique private float biomeFogColorStrength = 1.0F + Config.config.biomeFogColorMaxIntensity;
+    @Unique private float biomeFogColorStrength = 1.0F * Config.config.biomeFogColorMaxIntensity;
     @Unique private float caveDepthFogStrength  = ( 0.5F / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
     @Unique private float lightLevelFogStrength = ( 0.5F / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
     @Unique private float morningFogStrength    = ( 0.5F / 2.0F ) * Config.config.morningFogMaxIntensity;

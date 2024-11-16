@@ -24,7 +24,7 @@ public class Config {
                 description = "Float value between 0.0 (0%) and 1.0 (100%)",
                 maxLength = 1
         )
-        public Float biomeFogColorMaxIntensity = 0.5F;
+        public Float biomeFogColorMaxIntensity = 1.0F;
 
         @ConfigEntry(name = "Cave Depth Fog Enabled")
         public Boolean enableCaveDepthFog = true;
