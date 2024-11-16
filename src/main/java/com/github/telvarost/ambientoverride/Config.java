@@ -9,6 +9,13 @@ public class Config {
 
     public static class ConfigFields {
 
+        @ConfigEntry(
+                name = "Base Fog Intensity",
+                description = "Float value between 0.0 (0%) and 1.0 (100%)",
+                maxLength = 1
+        )
+        public Float baseFogIntensity = 0.5F;
+
         @ConfigEntry(name = "Biome Fog Colors Enabled")
         public Boolean enableBiomeFogColors = true;
 

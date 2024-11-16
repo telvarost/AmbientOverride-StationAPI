@@ -188,7 +188,7 @@ public abstract class WorldMixin {
             }
 
             /** - Calculate total target fog density */
-            ModHelper.ModHelperFields.targetFogDensity = 0.5F                                              // Base Fog Strength
+            ModHelper.ModHelperFields.targetFogDensity = Config.config.baseFogIntensity                    // Base Fog Strength
                                                        + ((1.0F - light) * lightLevelFogStrength)          // Light Level Fog
                                                        + ((1.0F - caveFogInverted) * caveDepthFogStrength) // Cave Depth Fog
                                                        + (morningFog * morningFogStrength);                // Morning Fog
