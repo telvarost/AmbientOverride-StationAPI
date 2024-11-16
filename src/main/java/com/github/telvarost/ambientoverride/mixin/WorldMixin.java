@@ -39,6 +39,7 @@ public abstract class WorldMixin {
     @Unique private float morningFogRng         = 0.5F;
     @Unique private int   startTimeOffset       = 1000;
     @Unique private long  morningFogDuration    = 1000L;
+    @Unique private int   caveFogDepthOffset    = 4;
 
     @Inject(
             method = "tick",
@@ -65,6 +66,7 @@ public abstract class WorldMixin {
             }
             startTimeOffset       = random.nextInt(6000);
             morningFogDuration    = random.nextInt(6000 - startTimeOffset) + 1000L;
+            caveFogDepthOffset    = random.nextInt(9);
         }
 
         if (1 == currentTimeOfDay % 20) {
@@ -157,7 +159,6 @@ public abstract class WorldMixin {
             /** - Get target cave fog density */
             float caveFogInverted = 1.0F;
             if (Config.config.enableCaveDepthFog) {
-                int caveFogDepthOffset = random.nextInt(9);
                 if ((64 - caveFogDepthOffset) > depth) {
                     caveFogInverted = (((float) depth - (32 - caveFogDepthOffset)) * ((float) depth - (32 - caveFogDepthOffset))) / 1024.0F;
                 }
