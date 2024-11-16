@@ -60,9 +60,7 @@ public abstract class GameRendererMixin {
         uniqueGreen = fogGreen;
         uniqueBlue = fogBlue;
 
-        if (Config.config.enableDynamicFog) {
-            this.viewDistance = (256 >> this.client.options.viewDistance) * getFogMultiplier();
-        }
+        this.viewDistance = (256 >> this.client.options.viewDistance) * getFogMultiplier();
     }
 
     @Inject(
