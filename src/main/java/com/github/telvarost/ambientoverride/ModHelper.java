@@ -8,11 +8,14 @@ public class ModHelper {
     @Entrypoint.Namespace
     public static final Namespace NAMESPACE = Null.get();
 
-//    public static float PostProcess(float red, float green, float blue) {
-//        return red * ModHelperFields.fogRedMultiplier;
-//    }
-
     public static class ModHelperFields {
+        /** - Target fog values */
+        public static Float targetFogDensity     = 0.5F;
+        public static Float targetFogRed         = 1.0F;
+        public static Float targetFogGreen       = 1.0F;
+        public static Float targetFogBlue        = 1.0F;
+
+        /** - Current fog values */
         public static Float fogDensityMultiplier = 0.5F;
         public static Float fogRedMultiplier     = 1.0F;
         public static Float fogGreenMultiplier   = 1.0F;

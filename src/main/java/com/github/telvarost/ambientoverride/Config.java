@@ -27,17 +27,17 @@ public class Config {
                 description = "Float value between 0.0 (0%) and 1.0 (100%)",
                 maxLength = 1
         )
-        public Float caveDepthFogMaxIntensity = 0.5F;
+        public Float caveDepthFogMaxIntensity = 1.0F;
 
-        @ConfigEntry(name = "Light Level Fog Enabled")
+        @ConfigEntry(name = "Light Level (Darkness) Fog Enabled")
         public Boolean enableLightLevelFog = true;
 
         @ConfigEntry(
-                name = "Light Level Fog Max Intensity",
+                name = "Light Level (Darkness) Fog Max Intensity",
                 description = "Float value between 0.0 (0%) and 1.0 (100%)",
                 maxLength = 1
         )
-        public Float lightLevelFogMaxIntensity = 0.5F;
+        public Float lightLevelFogMaxIntensity = 0.25F;
 
         @ConfigEntry(name = "Morning Fog Enabled")
         public Boolean enableMorningFog = true;
@@ -47,7 +47,7 @@ public class Config {
                 description = "Float value between 0.0 (0%) and 1.0 (100%)",
                 maxLength = 1
         )
-        public Float morningFogMaxIntensity = 0.5F;
+        public Float morningFogMaxIntensity = 1.0F;
 
         @ConfigEntry(
                 name = "Morning Fog Probability",

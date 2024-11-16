@@ -32,13 +32,13 @@ public abstract class WorldMixin {
     @Shadow public Random random;
 
     /** - Initialize daily fog values */
-    @Unique private float biomeFogColorStrength = (( 0.5F * 2.0F ) + 1.0F) * Config.config.biomeFogColorMaxIntensity;
-    @Unique private float caveDepthFogStrength  = ( 0.5F / 2.0F )          * Config.config.caveDepthFogMaxIntensity;
-    @Unique private float lightLevelFogStrength = ( 0.5F / 2.0F )          * Config.config.lightLevelFogMaxIntensity;
-    @Unique private float morningFogStrength    = 1.0F;//(random.nextFloat() / 2.0F) * Config.config.morningFogMaxIntensity;
+    @Unique private float biomeFogColorStrength = 0.5F + Config.config.biomeFogColorMaxIntensity;
+    @Unique private float caveDepthFogStrength  = ( 0.5F / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
+    @Unique private float lightLevelFogStrength = ( 0.5F / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
+    @Unique private float morningFogStrength    = ( 0.5F / 2.0F ) * Config.config.morningFogMaxIntensity;
     @Unique private float morningFogRng         = 0.5F;
-    @Unique private int   startTimeOffset       = 0;
-    @Unique private long  morningFogDuration    = 2000L;
+    @Unique private int   startTimeOffset       = 1000;
+    @Unique private long  morningFogDuration    = 1000L;
 
     @Inject(
             method = "tick",
@@ -49,14 +49,15 @@ public abstract class WorldMixin {
         /** - Get current time */
         long currentTime = properties.getTime();
         long currentTimeOfDay = currentTime % 24000L;
-        long currentDay = currentTime / 24000L;
 
         if (18000L == currentTimeOfDay) {
             /** - Get daily fog values */
-            biomeFogColorStrength = ( (random.nextFloat() * 2.0F) + 1.0F ) * Config.config.biomeFogColorMaxIntensity;
-            caveDepthFogStrength  = ( random.nextFloat() / 2.0F )          * Config.config.caveDepthFogMaxIntensity;
-            lightLevelFogStrength = ( random.nextFloat() / 2.0F )          * Config.config.lightLevelFogMaxIntensity;
-            morningFogStrength    = 1.0F;//(random.nextFloat() / 2.0F) * Config.config.morningFogMaxIntensity;
+            biomeFogColorStrength = (0 == random.nextInt(1))
+                                  ? 1.0F + ( random.nextFloat() * Config.config.biomeFogColorMaxIntensity )
+                                  : 1.0F - ( random.nextFloat() * Config.config.biomeFogColorMaxIntensity );
+            caveDepthFogStrength  = ( random.nextFloat() / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
+            lightLevelFogStrength = ( random.nextFloat() / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
+            morningFogStrength    = ( random.nextFloat() / 2.0F ) * Config.config.morningFogMaxIntensity;
             if (1.0F > Config.config.morningFogProbability) {
                 morningFogRng = random.nextFloat();
             } else {
@@ -66,8 +67,7 @@ public abstract class WorldMixin {
             morningFogDuration    = random.nextInt(6000 - startTimeOffset) + 1000L;
         }
 
-        if (0 == currentTimeOfDay % 100) {
-
+        if (1 == currentTimeOfDay % 20) {
             /** - Initialize environment and player */
             PlayerEntity player = PlayerHelper.getPlayerFromGame();
             String biomeName = "Unknown";
@@ -77,7 +77,9 @@ public abstract class WorldMixin {
 
             /** - Get environment around player */
             if (null != player) {
-                light = player.getBrightnessAtEyes(1.0F);
+                if (Config.config.enableLightLevelFog) {
+                    light = player.getBrightnessAtEyes(1.0F);
+                }
                 depth = player.y;
 
                 if (null != this.dimension.biomeSource) {
@@ -89,66 +91,66 @@ public abstract class WorldMixin {
             }
 
             /** - Get target biome color */
-            ModHelper.ModHelperFields.fogRedMultiplier = 1.0F;
-            ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F;
-            ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
+            ModHelper.ModHelperFields.targetFogRed = 1.0F;
+            ModHelper.ModHelperFields.targetFogGreen = 1.0F;
+            ModHelper.ModHelperFields.targetFogBlue = 1.0F;
             if (Config.config.enableBiomeFogColors) {
                 if (Biome.RAINFOREST == biome) { // + .2
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (-0.1F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.2F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (-0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.2F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (0.1F * biomeFogColorStrength);
                 } else if (Biome.SWAMPLAND == biome) { // + .1
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (-0.1F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.1F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (-0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (0.1F * biomeFogColorStrength);
                 } else if (Biome.SEASONAL_FOREST == biome) { // + .1
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F;
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.1F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F;
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F;
                 } else if (Biome.FOREST == biome) { // - .1
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (-0.1F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F;
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (-0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F;
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F;
                 } else if (Biome.SAVANNA == biome) { // + .4
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (0.2F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.2F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (0.2F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.2F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F;
                 } else if (Biome.SHRUBLAND == biome) { // + .8
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (0.3F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.2F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (0.3F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (0.3F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.2F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (0.3F * biomeFogColorStrength);
                 } else if (Biome.TAIGA == biome) { // + .6
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (0.1F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.1F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (0.4F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (0.4F * biomeFogColorStrength);
                 } else if (Biome.DESERT == biome) { // + .6
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (0.4F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.3F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (-0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (0.4F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.3F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (-0.1F * biomeFogColorStrength);
                 } else if (Biome.PLAINS == biome) { // + .5
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (0.2F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.1F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (0.2F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (0.2F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.1F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (0.2F * biomeFogColorStrength);
                 } else if (Biome.ICE_DESERT == biome) { // + 2.5
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (0.7F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.8F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (1.0F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (0.7F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.8F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (1.0F * biomeFogColorStrength);
                 } else if (Biome.TUNDRA == biome) { // + 1.1
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (0.4F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.2F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (0.5F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (0.4F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.2F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (0.5F * biomeFogColorStrength);
                 } else if (Biome.HELL == biome) { // - .7
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F;
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (-0.2F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (-0.5F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F;
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (-0.2F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (-0.5F * biomeFogColorStrength);
                 } else if (Biome.SKY == biome) { // + 1.3
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F + (0.6F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F + (0.3F * biomeFogColorStrength);
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F + (0.4F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F + (0.6F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F + (0.3F * biomeFogColorStrength);
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F + (0.4F * biomeFogColorStrength);
                 } else { // + .0
-                    ModHelper.ModHelperFields.fogRedMultiplier = 1.0F;
-                    ModHelper.ModHelperFields.fogGreenMultiplier = 1.0F;
-                    ModHelper.ModHelperFields.fogBlueMultiplier = 1.0F;
+                    ModHelper.ModHelperFields.targetFogRed = 1.0F;
+                    ModHelper.ModHelperFields.targetFogGreen = 1.0F;
+                    ModHelper.ModHelperFields.targetFogBlue = 1.0F;
                 }
             }
 
@@ -167,10 +169,8 @@ public abstract class WorldMixin {
                 long morningFogStartTime = ((18000L + startTimeOffset) % 24000L);
                 long offsetMorningFogStartTime = (12000L < morningFogStartTime) ? (morningFogStartTime - 24000L) : morningFogStartTime;
                 long offsetCurrentTimeOfDay = (12000L < currentTimeOfDay) ? (currentTimeOfDay - 24000L) : currentTimeOfDay;
-                System.out.println("Duration: " + morningFogDuration + ", Start Time: " + morningFogStartTime + ", Probability: " + morningFogRng);
 
                 if (morningFogRng > (1.0F - Config.config.morningFogProbability)) {
-                    System.out.println("True!");
                     if (offsetCurrentTimeOfDay >= offsetMorningFogStartTime
                             && offsetCurrentTimeOfDay < (offsetMorningFogStartTime + 1000L)
                     ) {
@@ -188,12 +188,42 @@ public abstract class WorldMixin {
             }
 
             /** - Calculate total target fog density */
-            ModHelper.ModHelperFields.fogDensityMultiplier = 0.5F                                                 // Base Fog Strength
-                                                           + 0//((1.0F - light) * lightLevelFogStrength)          // Light Level Fog
-                                                           + 0//((1.0F - caveFogInverted) * caveDepthFogStrength) // Cave Depth Fog
-                                                           +    (morningFog) * morningFogStrength;                // Morning Fog
+            ModHelper.ModHelperFields.targetFogDensity = 0.5F                                              // Base Fog Strength
+                                                       + ((1.0F - light) * lightLevelFogStrength)          // Light Level Fog
+                                                       + ((1.0F - caveFogInverted) * caveDepthFogStrength) // Cave Depth Fog
+                                                       + (morningFog * morningFogStrength);                // Morning Fog
+        }
 
-            System.out.println("Day: " + currentDay + ", Time: " + currentTimeOfDay + ", Biome: " + biomeName);
+        if (ModHelper.ModHelperFields.fogDensityMultiplier < (ModHelper.ModHelperFields.targetFogDensity - 0.001)) {
+            ModHelper.ModHelperFields.fogDensityMultiplier += 0.001F;
+        } else if (ModHelper.ModHelperFields.fogDensityMultiplier > (ModHelper.ModHelperFields.targetFogDensity + 0.001)) {
+            ModHelper.ModHelperFields.fogDensityMultiplier -= 0.001F;
+        } else {
+            ModHelper.ModHelperFields.fogDensityMultiplier = ModHelper.ModHelperFields.targetFogDensity;
+        }
+
+        if (ModHelper.ModHelperFields.fogRedMultiplier < (ModHelper.ModHelperFields.targetFogRed - 0.001)) {
+            ModHelper.ModHelperFields.fogRedMultiplier += 0.001F;
+        } else if (ModHelper.ModHelperFields.fogRedMultiplier > (ModHelper.ModHelperFields.targetFogRed + 0.001)) {
+            ModHelper.ModHelperFields.fogRedMultiplier -= 0.001F;
+        } else {
+            ModHelper.ModHelperFields.fogRedMultiplier = ModHelper.ModHelperFields.targetFogRed;
+        }
+
+        if (ModHelper.ModHelperFields.fogGreenMultiplier < (ModHelper.ModHelperFields.targetFogGreen - 0.001)) {
+            ModHelper.ModHelperFields.fogGreenMultiplier += 0.001F;
+        } else if (ModHelper.ModHelperFields.fogGreenMultiplier > (ModHelper.ModHelperFields.targetFogGreen + 0.001)) {
+            ModHelper.ModHelperFields.fogGreenMultiplier -= 0.001F;
+        } else {
+            ModHelper.ModHelperFields.fogGreenMultiplier = ModHelper.ModHelperFields.targetFogGreen;
+        }
+
+        if (ModHelper.ModHelperFields.fogBlueMultiplier < (ModHelper.ModHelperFields.targetFogBlue - 0.001)) {
+            ModHelper.ModHelperFields.fogBlueMultiplier += 0.001F;
+        } else if (ModHelper.ModHelperFields.fogBlueMultiplier > (ModHelper.ModHelperFields.targetFogBlue + 0.001)) {
+            ModHelper.ModHelperFields.fogBlueMultiplier -= 0.001F;
+        } else {
+            ModHelper.ModHelperFields.fogBlueMultiplier = ModHelper.ModHelperFields.targetFogBlue;
         }
     }
 
