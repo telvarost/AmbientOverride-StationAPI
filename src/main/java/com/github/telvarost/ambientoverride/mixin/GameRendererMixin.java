@@ -54,13 +54,16 @@ public abstract class GameRendererMixin {
         }
     }
 
+    @Inject(method = "renderWorld", at = @At(value = "RETURN"))
+    public void clientsideEssentials_overrideFogDensity(float tickDelta, int eye, CallbackInfo ci) {
+        this.viewDistance = this.viewDistance * getFogMultiplier();
+    }
+
     @Inject(method = "applyFog", at = @At(value = "HEAD"))
     public void clientsideEssentials_overrideFogDensity(int f, float par2, CallbackInfo ci) {
         uniqueRed = fogRed;
         uniqueGreen = fogGreen;
         uniqueBlue = fogBlue;
-
-        this.viewDistance = (256 >> this.client.options.viewDistance) * getFogMultiplier();
     }
 
     @Inject(
