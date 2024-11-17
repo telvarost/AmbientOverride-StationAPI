@@ -240,4 +240,26 @@ public abstract class WorldMixin {
                                  , z * ModHelper.ModHelperFields.fogBlueMultiplier
                                  );
     }
+
+    @Inject(
+            method = "afterSkipNight",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    protected void afterSkipNight(CallbackInfo ci) {
+        System.out.println("Hello");
+        /** - Get daily fog values */
+        biomeFogColorStrength = ( random.nextFloat() * 2.0F ) * Config.config.biomeFogColorMaxIntensity;
+        caveDepthFogStrength  = ( random.nextFloat() / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
+        lightLevelFogStrength = ( random.nextFloat() / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
+        morningFogStrength    = ( random.nextFloat() / 2.0F ) * Config.config.morningFogMaxIntensity;
+        if (1.0F > Config.config.morningFogProbability) {
+            morningFogRng = random.nextFloat();
+        } else {
+            morningFogRng = 1.0F;
+        }
+        startTimeOffset       = random.nextInt(6000);
+        morningFogDuration    = random.nextInt(6000 - startTimeOffset) + 1000L;
+        caveFogDepthOffset    = random.nextInt(9);
+    }
 }
