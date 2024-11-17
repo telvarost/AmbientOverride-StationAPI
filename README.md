@@ -1,7 +1,21 @@
 # AmbientOverride StationAPI Edition for Minecraft Beta 1.7.3
 
-Handles fog, light levels, and other clientside features normally controlled by players giving them a unique spin.
+Adds dynamic fog to b1.7.3
 * Mod is clientside
+* Currently, the mod does not work with UniTweaks and only works with ClientsideEssentials v2.3.1 and above.
+
+### Features
+- Biome Fog Colors
+    - Each biome has a unique fog color that varies in intensity day by day
+- Cave Fog Density
+    - Fog increases in density as the player nears Y level 28, the fog level can vary day by day and move up or down slightly
+- Morning Fog Density
+    - Beginning at midnight there is a chance for morning fog to start and last anywhere from 100 seconds to 400 seconds dissipating shortly after daybreak
+- Light Level (Darkness) Fog Density
+    - Fog density increases slightly when the light level is low
+
+Each of these feature's max intensity can be toggled and values will vary day by day with values changing at midnight
+- The base fog density can also be changed, all changes are made through GlassConfigAPI 3
 
 ## Installation using Prism Launcher
 
