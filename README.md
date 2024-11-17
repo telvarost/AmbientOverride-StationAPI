@@ -22,7 +22,7 @@ Each of these feature's max intensity can be toggled and values will vary day by
 2. Install Java 17, set the instance to use it, and disable compatibility checks on the instance: https://adoptium.net/temurin/releases/
 3. Add StationAPI to the mod folder for the instance: https://modrinth.com/mod/stationapi
 4. (Optional) Add Mod Menu to the mod folder for the instance: https://modrinth.com/mod/modmenu-beta
-5. (Optional) Add GlassConfigAPI 2.0+ to the mod folder for the instance: https://modrinth.com/mod/glass-config-api
+5. (Optional) Add GlassConfigAPI 3.0+ to the mod folder for the instance: https://modrinth.com/mod/glass-config-api
 6. Add this mod to the mod folder for the instance: https://github.com/telvarost/AmbientOverride-StationAPI/releases
 7. Run and enjoy! 👍
 

@@ -32,7 +32,7 @@ public abstract class WorldMixin {
     @Shadow public Random random;
 
     /** - Initialize daily fog values */
-    @Unique private float biomeFogColorStrength = 1.0F * Config.config.biomeFogColorMaxIntensity;
+    @Unique private float biomeFogColorStrength = 1.0F * Config.config.biomeFogColorsMaxIntensity;
     @Unique private float caveDepthFogStrength  = ( 0.5F / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
     @Unique private float lightLevelFogStrength = ( 0.5F / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
     @Unique private float morningFogStrength    = ( 0.5F / 2.0F ) * Config.config.morningFogMaxIntensity;
@@ -53,7 +53,7 @@ public abstract class WorldMixin {
 
         if (18000L == currentTimeOfDay) {
             /** - Get daily fog values */
-            biomeFogColorStrength = ( random.nextFloat() * 2.0F ) * Config.config.biomeFogColorMaxIntensity;
+            biomeFogColorStrength = ( random.nextFloat() * 2.0F ) * Config.config.biomeFogColorsMaxIntensity;
             caveDepthFogStrength  = ( random.nextFloat() / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
             lightLevelFogStrength = ( random.nextFloat() / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
             morningFogStrength    = ( random.nextFloat() / 2.0F ) * Config.config.morningFogMaxIntensity;
@@ -249,7 +249,7 @@ public abstract class WorldMixin {
     protected void afterSkipNight(CallbackInfo ci) {
         System.out.println("Hello");
         /** - Get daily fog values */
-        biomeFogColorStrength = ( random.nextFloat() * 2.0F ) * Config.config.biomeFogColorMaxIntensity;
+        biomeFogColorStrength = ( random.nextFloat() * 2.0F ) * Config.config.biomeFogColorsMaxIntensity;
         caveDepthFogStrength  = ( random.nextFloat() / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
         lightLevelFogStrength = ( random.nextFloat() / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
         morningFogStrength    = ( random.nextFloat() / 2.0F ) * Config.config.morningFogMaxIntensity;
