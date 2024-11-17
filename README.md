@@ -2,7 +2,6 @@
 
 Adds dynamic fog to b1.7.3
 * Mod is clientside
-* Currently, the mod does not work with UniTweaks and only works with ClientsideEssentials v2.3.1 and above.
 
 ### Features
 - Biome Fog Colors
