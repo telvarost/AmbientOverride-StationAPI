@@ -47,10 +47,10 @@ public abstract class GameRendererMixin {
 
     @Unique
     private float getFogMultiplier() {
-        if (ModHelper.ModHelperFields.fogDensityMultiplier == 0F) {
+        if (ModHelper.Fields.fogDensityMultiplier == 0F) {
             return 100F;
         } else {
-            return (1F - Math.min(ModHelper.ModHelperFields.fogDensityMultiplier, 0.95F)) * 2F;
+            return (1F - Math.min(ModHelper.Fields.fogDensityMultiplier, 0.95F)) * 2F;
         }
     }
 
@@ -103,7 +103,7 @@ public abstract class GameRendererMixin {
                 blue = this.fogBlue;
             }
 
-            if (0.0F == ModHelper.ModHelperFields.fogDensityMultiplier) {
+            if (0.0F == ModHelper.Fields.fogDensityMultiplier) {
                 GL11.glClearColor(red, green, blue, 0.0f);
                 ci.cancel();
             }
@@ -117,9 +117,9 @@ public abstract class GameRendererMixin {
     )
     private void clientsideEssentials_updateSkyAndFogColors(float f, CallbackInfo ci) {
         if (Config.config.enableBiomeFogColors) {
-            GL11.glClearColor( uniqueRed * ModHelper.ModHelperFields.fogRedMultiplier
-                             , uniqueGreen * ModHelper.ModHelperFields.fogGreenMultiplier
-                             , uniqueBlue * ModHelper.ModHelperFields.fogBlueMultiplier
+            GL11.glClearColor( uniqueRed * ModHelper.Fields.fogRedMultiplier
+                             , uniqueGreen * ModHelper.Fields.fogGreenMultiplier
+                             , uniqueBlue * ModHelper.Fields.fogBlueMultiplier
                              , 0.0f);
         }
     }
@@ -132,9 +132,9 @@ public abstract class GameRendererMixin {
     private void clientsideEssentials_updateFogColorBuffer(float red, float green, float blue, float i, CallbackInfoReturnable<FloatBuffer> cir) {
         if (Config.config.enableBiomeFogColors) {
             this.fogColorBuffer.clear();
-            this.fogColorBuffer.put(red   * ModHelper.ModHelperFields.fogRedMultiplier  )
-                               .put(green * ModHelper.ModHelperFields.fogGreenMultiplier)
-                               .put(blue  * ModHelper.ModHelperFields.fogBlueMultiplier )
+            this.fogColorBuffer.put(red   * ModHelper.Fields.fogRedMultiplier  )
+                               .put(green * ModHelper.Fields.fogGreenMultiplier)
+                               .put(blue  * ModHelper.Fields.fogBlueMultiplier )
                                .put(i);
             this.fogColorBuffer.flip();
             cir.setReturnValue(this.fogColorBuffer);
