@@ -3,7 +3,6 @@ package com.github.telvarost.ambientoverride;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.util.Namespace;
-import org.spongepowered.asm.mixin.Unique;
 
 public class ModHelper {
     @Entrypoint.Namespace
