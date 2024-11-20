@@ -85,13 +85,13 @@ public abstract class WorldMixin {
             ModHelper.Fields.targetFogBlue = 1.0F;
             if (Config.config.enableBiomeFogColors) {
                 if (Biome.RAINFOREST == biome) { // + .2
-                    ModHelper.Fields.targetFogRed = 1.0F + (-0.1F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.2F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (0.1F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 0.85F + (0.15F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.05F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 0.85F + (0.15F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (0.2F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 0.8F + (0.2F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (0.2F * ModHelper.Fields.biomeFogColorStrength);
                 } else if (Biome.SWAMPLAND == biome) { // + .1
-                    ModHelper.Fields.targetFogRed = 1.0F + (-0.1F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.1F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (0.1F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 0.95F + (0.05F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.1F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 0.9F + (0.1F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (0.05F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 0.9F + (0.1F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (0.1F * ModHelper.Fields.biomeFogColorStrength);
                 } else if (Biome.SEASONAL_FOREST == biome) { // + .1
                     ModHelper.Fields.targetFogRed = 1.0F;
                     ModHelper.Fields.targetFogGreen = 1.0F + (0.1F * ModHelper.Fields.biomeFogColorStrength);
@@ -129,9 +129,9 @@ public abstract class WorldMixin {
                     ModHelper.Fields.targetFogGreen = 1.0F + (0.2F * ModHelper.Fields.biomeFogColorStrength);
                     ModHelper.Fields.targetFogBlue = 1.0F + (0.5F * ModHelper.Fields.biomeFogColorStrength);
                 } else if (Biome.HELL == biome) { // - .7
-                    ModHelper.Fields.targetFogRed = 1.0F;
-                    ModHelper.Fields.targetFogGreen = 1.0F + (-0.2F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (-0.5F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (-0.15F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (-0.15F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.0F + (-0.15F * ModHelper.Fields.biomeFogColorStrength);
                 } else if (Biome.SKY == biome) { // + 1.3
                     ModHelper.Fields.targetFogRed = 1.0F + (0.6F * ModHelper.Fields.biomeFogColorStrength);
                     ModHelper.Fields.targetFogGreen = 1.0F + (0.3F * ModHelper.Fields.biomeFogColorStrength);
