@@ -14,6 +14,7 @@ public class ModHelper {
         public static float caveDepthFogStrength  = ( 0.5F / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
         public static float lightLevelFogStrength = ( 0.5F / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
         public static float morningFogStrength    = ( 0.5F / 2.0F ) * Config.config.morningFogMaxIntensity;
+        public static float voidFogStrength       = ( 0.5F / 2.0F ) * Config.config.voidFogMaxIntensity;
         public static float morningFogRng         = 0.5F;
         public static int   startTimeOffset       = 1000;
         public static long  morningFogDuration    = 1000L;

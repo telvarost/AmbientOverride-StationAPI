@@ -46,6 +46,7 @@ public abstract class WorldMixin {
             ModHelper.Fields.caveDepthFogStrength  = ( random.nextFloat() / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
             ModHelper.Fields.lightLevelFogStrength = ( random.nextFloat() / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
             ModHelper.Fields.morningFogStrength    = ( random.nextFloat() / 2.0F ) * Config.config.morningFogMaxIntensity;
+            ModHelper.Fields.voidFogStrength       = ( random.nextFloat() / 2.0F ) * Config.config.voidFogMaxIntensity;
             if (1.0F > Config.config.morningFogProbability) {
                 ModHelper.Fields.morningFogRng = random.nextFloat();
             } else {
@@ -145,9 +146,17 @@ public abstract class WorldMixin {
 
             /** - Get target cave fog density */
             float caveFogInverted = 1.0F;
+            float voidFog = 0.0F;
             if (Config.config.enableCaveDepthFog) {
                 if ((64 - ModHelper.Fields.caveFogDepthOffset) > depth) {
                     caveFogInverted = (((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset)) * ((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset))) / 1024.0F;
+                }
+
+                if (18 >= depth) {
+                    voidFog = (18.0F - (float)depth) / 18.0F;
+                    ModHelper.Fields.targetFogRed = 0.01F;
+                    ModHelper.Fields.targetFogGreen = 0.01F;
+                    ModHelper.Fields.targetFogBlue = 0.01F;
                 }
             }
 
@@ -176,10 +185,11 @@ public abstract class WorldMixin {
             }
 
             /** - Calculate total target fog density */
-            ModHelper.Fields.targetFogDensity = Config.config.baseFogIntensity                    // Base Fog Strength
-                                                       + ((1.0F - light) * ModHelper.Fields.lightLevelFogStrength)          // Light Level Fog
-                                                       + ((1.0F - caveFogInverted) * ModHelper.Fields.caveDepthFogStrength) // Cave Depth Fog
-                                                       + (morningFog * ModHelper.Fields.morningFogStrength);                // Morning Fog
+            ModHelper.Fields.targetFogDensity = Config.config.baseFogIntensity                                     // Base Fog Strength
+                                              + ((1.0F - light) * ModHelper.Fields.lightLevelFogStrength)          // Light Level Fog
+                                              + ((1.0F - caveFogInverted) * ModHelper.Fields.caveDepthFogStrength) // Cave Depth Fog
+                                              + (morningFog * ModHelper.Fields.morningFogStrength)                 // Morning Fog
+                                              + (voidFog * ModHelper.Fields.voidFogStrength);                      // Void Fog
         }
 
         if (ModHelper.Fields.fogDensityMultiplier < (ModHelper.Fields.targetFogDensity - 0.001)) {

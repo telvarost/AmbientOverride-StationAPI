@@ -56,6 +56,16 @@ public class Config {
         )
         public Float morningFogMaxIntensity = 1.0F;
 
+        @ConfigEntry(name = "Void Fog Enabled")
+        public Boolean enableVoidFog = true;
+
+        @ConfigEntry(
+                name = "Void Fog Max Intensity",
+                description = "Float value between 0.0 (0%) and 1.0 (100%)",
+                maxLength = 1
+        )
+        public Float voidFogMaxIntensity = 1.0F;
+
         @ConfigEntry(
                 name = "Morning Fog Probability",
                 description = "Float value between 0.0 (0%) and 1.0 (100%)",

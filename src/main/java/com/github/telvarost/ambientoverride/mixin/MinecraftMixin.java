@@ -30,6 +30,8 @@ public class MinecraftMixin {
         ModHelper.Fields.caveDepthFogStrength  = ( random.nextFloat() / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
         ModHelper.Fields.lightLevelFogStrength = ( random.nextFloat() / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
         ModHelper.Fields.morningFogStrength    = ( random.nextFloat() / 2.0F ) * Config.config.morningFogMaxIntensity;
+        ModHelper.Fields.voidFogStrength       = ( random.nextFloat() / 2.0F ) * Config.config.voidFogMaxIntensity;
+        ModHelper.Fields.caveFogDepthOffset    = random.nextInt(9);
         if (1.0F > Config.config.morningFogProbability) {
             ModHelper.Fields.morningFogRng = random.nextFloat();
         } else {
