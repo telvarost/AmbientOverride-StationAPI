@@ -27,6 +27,9 @@
     ],
     "gcapi3": [
       "com.github.telvarost.ambientoverride.Config"
+    ],
+    "gcapi3:factory_provider": [
+      "com.github.telvarost.ambientoverride.FogApproachEnumFactory"
     ]
   },
   "mixins": [

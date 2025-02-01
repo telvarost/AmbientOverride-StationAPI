@@ -4,14 +4,20 @@ Adds dynamic fog to b1.7.3
 * Mod is clientside
 
 ### Features
+- Different Fog Approach Types
+    - Exponential growth fog approach or older linear fog approach behavior
 - Biome Fog Colors
     - Each biome has a unique fog color that varies in intensity day by day
+- Cave Fog Colors
+    - Desaturates biome fog colors and darkens fog at lower Y levels
 - Cave Fog Density
     - Fog increases in density as the player nears Y level 28, the fog level can vary day by day and move up or down slightly
 - Morning Fog Density
     - Beginning at midnight there is a chance for morning fog to start and last anywhere from 100 seconds to 400 seconds dissipating shortly after daybreak
 - Light Level (Darkness) Fog Density
     - Fog density increases slightly when the light level is low
+- Void Fog
+    - Increases fog density and darkens fog significantly near bedrock Y levels
 
 Each of these feature's max intensity can be toggled and values will vary day by day with values changing at midnight
 - The base fog density can also be changed, all changes are made through GlassConfigAPI 3
