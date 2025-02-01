@@ -10,10 +10,16 @@ public class Config {
     public static class ConfigFields {
 
         @ConfigEntry(
-                name = "Approaching Fog Behavior",
+                name = "Approaching Fog Color Behavior",
                 description = "Linear = slow, Growth = exponential"
         )
-        public FogApproachEnum fogApproachBehavior = FogApproachEnum.GROWTH;
+        public FogApproachEnum fogColorApproachBehavior = FogApproachEnum.GROWTH;
+
+        @ConfigEntry(
+                name = "Approaching Fog Density Behavior",
+                description = "Linear = slow, Growth = exponential"
+        )
+        public FogApproachEnum fogDensityApproachBehavior = FogApproachEnum.LINEAR;
 
         @ConfigEntry(
                 name = "Allow Randomization",

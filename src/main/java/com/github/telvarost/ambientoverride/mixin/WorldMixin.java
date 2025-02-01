@@ -213,7 +213,7 @@ public abstract class WorldMixin {
                                               + (voidFog * ModHelper.Fields.voidFogStrength);                      // Void Fog
         }
 
-        if (FogApproachEnum.LINEAR == Config.config.fogApproachBehavior) {
+        if (FogApproachEnum.LINEAR == Config.config.fogDensityApproachBehavior) {
             ModHelper.Fields.fogDensityMultiplier = ModHelper.linearApproach (
                     ModHelper.Fields.fogDensityMultiplier,
                     ModHelper.Fields.targetFogDensity,
@@ -227,7 +227,7 @@ public abstract class WorldMixin {
             );
         }
 
-        if (FogApproachEnum.LINEAR == Config.config.fogApproachBehavior) {
+        if (FogApproachEnum.LINEAR == Config.config.fogColorApproachBehavior) {
             ModHelper.Fields.fogRedMultiplier = ModHelper.linearApproach (
                     ModHelper.Fields.fogRedMultiplier,
                     ModHelper.Fields.targetFogRed,
@@ -241,7 +241,7 @@ public abstract class WorldMixin {
             );
         }
 
-        if (FogApproachEnum.LINEAR == Config.config.fogApproachBehavior) {
+        if (FogApproachEnum.LINEAR == Config.config.fogColorApproachBehavior) {
             ModHelper.Fields.fogGreenMultiplier = ModHelper.linearApproach (
                     ModHelper.Fields.fogGreenMultiplier,
                     ModHelper.Fields.targetFogGreen,
@@ -255,7 +255,7 @@ public abstract class WorldMixin {
             );
         }
 
-        if (FogApproachEnum.LINEAR == Config.config.fogApproachBehavior) {
+        if (FogApproachEnum.LINEAR == Config.config.fogColorApproachBehavior) {
             ModHelper.Fields.fogBlueMultiplier = ModHelper.linearApproach (
                     ModHelper.Fields.fogBlueMultiplier,
                     ModHelper.Fields.targetFogBlue,
