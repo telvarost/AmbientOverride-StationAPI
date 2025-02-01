@@ -54,7 +54,7 @@ public abstract class WorldMixin {
             /** - Initialize environment and player */
             PlayerEntity player = PlayerHelper.getPlayerFromGame();
             Biome biome = null;
-            double depth = 60;
+            double depth = 64;
             float light = 1.0F;
 
             /** - Get environment around player */
@@ -69,10 +69,22 @@ public abstract class WorldMixin {
                 }
             }
 
-            /** - Get target biome color */
+            /** - Initialize target fog colors */
             ModHelper.Fields.targetFogRed = 1.0F;
             ModHelper.Fields.targetFogGreen = 1.0F;
             ModHelper.Fields.targetFogBlue = 1.0F;
+            float appliedBiomeFogColorStrength = ModHelper.Fields.biomeFogColorStrength;
+            float caveFogColor = 1.0F;
+
+            /** - Desaturate biome fog colors */
+            if (Config.config.enableCaveDepthFogColors) {
+                if (64 > depth) {
+                    caveFogColor = (float) depth / 64.0F;
+                    appliedBiomeFogColorStrength *= caveFogColor;
+                }
+            }
+
+            /** - Get target biome color */
             if (Config.config.enableBiomeFogColors) {
                 if (Biome.RAINFOREST == biome) { // - .2
                     ModHelper.Fields.targetFogRed = 0.85F + (0.15F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.05F * ModHelper.Fields.biomeFogColorStrength);
@@ -84,52 +96,62 @@ public abstract class WorldMixin {
                     ModHelper.Fields.targetFogBlue = 0.9F + (0.1F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (0.1F * ModHelper.Fields.biomeFogColorStrength);
                 } else if (Biome.SEASONAL_FOREST == biome) { // + .1
                     ModHelper.Fields.targetFogRed = 1.0F;
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.1F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.1F * appliedBiomeFogColorStrength);
                     ModHelper.Fields.targetFogBlue = 1.0F;
                 } else if (Biome.FOREST == biome) { // - .1
-                    ModHelper.Fields.targetFogRed = 1.0F + (-0.1F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (-0.1F * appliedBiomeFogColorStrength);
                     ModHelper.Fields.targetFogGreen = 1.0F;
                     ModHelper.Fields.targetFogBlue = 1.0F;
                 } else if (Biome.SAVANNA == biome) { // + .4
-                    ModHelper.Fields.targetFogRed = 1.0F + (0.2F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.2F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (0.2F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.2F * appliedBiomeFogColorStrength);
                     ModHelper.Fields.targetFogBlue = 1.0F;
                 } else if (Biome.SHRUBLAND == biome) { // + .8
-                    ModHelper.Fields.targetFogRed = 1.0F + (0.3F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.2F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (0.3F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (0.3F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.2F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.0F + (0.3F * appliedBiomeFogColorStrength);
                 } else if (Biome.TAIGA == biome) { // + .6
-                    ModHelper.Fields.targetFogRed = 1.0F + (0.1F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.1F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (0.4F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (0.1F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.1F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.0F + (0.4F * appliedBiomeFogColorStrength);
                 } else if (Biome.DESERT == biome) { // + .6
-                    ModHelper.Fields.targetFogRed = 1.0F + (0.4F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.3F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (-0.1F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (0.4F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.3F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.0F + (-0.1F * appliedBiomeFogColorStrength);
                 } else if (Biome.PLAINS == biome) { // + .5
-                    ModHelper.Fields.targetFogRed = 1.0F + (0.2F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.1F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (0.2F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (0.2F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.1F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.0F + (0.2F * appliedBiomeFogColorStrength);
                 } else if (Biome.ICE_DESERT == biome) { // + 2.5
-                    ModHelper.Fields.targetFogRed = 1.0F + (0.7F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.8F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (1.0F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (0.7F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.8F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.0F + (1.0F * appliedBiomeFogColorStrength);
                 } else if (Biome.TUNDRA == biome) { // + 1.1
-                    ModHelper.Fields.targetFogRed = 1.0F + (0.4F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.2F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (0.5F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (0.4F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.2F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.0F + (0.5F * appliedBiomeFogColorStrength);
                 } else if (Biome.HELL == biome) { // 0
-                    ModHelper.Fields.targetFogRed = 1.2F + (-0.2F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.2F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.2F + (-0.2F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.2F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.2F + (-0.2F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.2F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.2F + (-0.2F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.2F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.2F + (-0.2F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.2F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.2F + (-0.2F * (1.0F - Config.config.biomeFogColorsMaxIntensity)) + (-0.2F * appliedBiomeFogColorStrength);
                 } else if (Biome.SKY == biome) { // + 1.3
-                    ModHelper.Fields.targetFogRed = 1.0F + (0.6F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogGreen = 1.0F + (0.3F * ModHelper.Fields.biomeFogColorStrength);
-                    ModHelper.Fields.targetFogBlue = 1.0F + (0.4F * ModHelper.Fields.biomeFogColorStrength);
+                    ModHelper.Fields.targetFogRed = 1.0F + (0.6F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogGreen = 1.0F + (0.3F * appliedBiomeFogColorStrength);
+                    ModHelper.Fields.targetFogBlue = 1.0F + (0.4F * appliedBiomeFogColorStrength);
                 } else { // + .0
                     ModHelper.Fields.targetFogRed = 1.0F;
                     ModHelper.Fields.targetFogGreen = 1.0F;
                     ModHelper.Fields.targetFogBlue = 1.0F;
+                }
+            }
+
+            /** - Get target cave fog color */
+            if (Config.config.enableCaveDepthFogColors) {
+                if (64 > depth) {
+                    caveFogColor = 0.5F + (float) ((depth / 64.0F) * 0.5F);
+                    ModHelper.Fields.targetFogRed   *= caveFogColor;
+                    ModHelper.Fields.targetFogGreen *= caveFogColor;
+                    ModHelper.Fields.targetFogBlue  *= caveFogColor;
                 }
             }
 
@@ -138,7 +160,9 @@ public abstract class WorldMixin {
             float voidFog = 0.0F;
             if (Config.config.enableCaveDepthFog) {
                 if ((64 - ModHelper.Fields.caveFogDepthOffset) > depth) {
-                    caveFogInverted = (((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset)) * ((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset))) / 1024.0F;
+                    caveFogInverted = ( ((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset))
+                                      * ((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset))
+                                      ) / 1024.0F;
                 }
             }
 

@@ -13,7 +13,7 @@ public class Config {
                 name = "Approaching Fog Behavior",
                 description = "Linear = slow, Growth = exponential"
         )
-        public FogApproachEnum fogApproachBehavior = FogApproachEnum.LINEAR;
+        public FogApproachEnum fogApproachBehavior = FogApproachEnum.GROWTH;
 
         @ConfigEntry(
                 name = "Allow Randomization",
@@ -37,6 +37,12 @@ public class Config {
                 maxLength = 1
         )
         public Float biomeFogColorsMaxIntensity = 1.0F;
+
+        @ConfigEntry(
+                name = "Cave Depth Fog Colors Enabled",
+                description = "Desaturates and darkens fog at low Y levels"
+        )
+        public Boolean enableCaveDepthFogColors = true;
 
         @ConfigEntry(name = "Cave Depth Fog Enabled")
         public Boolean enableCaveDepthFog = true;
@@ -79,7 +85,7 @@ public class Config {
                 name = "Void Fog Enabled",
                 description = "Works best with growth fog behavior type"
         )
-        public Boolean enableVoidFog = false;
+        public Boolean enableVoidFog = true;
 
         @ConfigEntry(
                 name = "Void Fog Intensity",
