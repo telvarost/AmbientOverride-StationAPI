@@ -1,6 +1,7 @@
 package com.github.telvarost.ambientoverride.mixin;
 
 import com.github.telvarost.ambientoverride.Config;
+import com.github.telvarost.ambientoverride.FogApproachEnum;
 import com.github.telvarost.ambientoverride.ModHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -42,25 +43,16 @@ public abstract class WorldMixin {
 
         if (18000L == currentTimeOfDay) {
             /** - Get daily fog values */
-            ModHelper.Fields.biomeFogColorStrength = ( random.nextFloat() * 2.0F ) * Config.config.biomeFogColorsMaxIntensity;
-            ModHelper.Fields.caveDepthFogStrength  = ( random.nextFloat() / 2.0F ) * Config.config.caveDepthFogMaxIntensity;
-            ModHelper.Fields.lightLevelFogStrength = ( random.nextFloat() / 2.0F ) * Config.config.lightLevelFogMaxIntensity;
-            ModHelper.Fields.morningFogStrength    = ( random.nextFloat() / 2.0F ) * Config.config.morningFogMaxIntensity;
-            ModHelper.Fields.voidFogStrength       = ( random.nextFloat() / 2.0F ) * Config.config.voidFogMaxIntensity;
-            if (1.0F > Config.config.morningFogProbability) {
-                ModHelper.Fields.morningFogRng = random.nextFloat();
+            if (Config.config.allowRandomization) {
+                ModHelper.randomizeFogValues(random);
             } else {
-                ModHelper.Fields.morningFogRng = 1.0F;
+                ModHelper.setConstantFogValues(random);
             }
-            ModHelper.Fields.startTimeOffset       = random.nextInt(6000);
-            ModHelper.Fields.morningFogDuration    = random.nextInt(6000 - ModHelper.Fields.startTimeOffset) + 1000L;
-            ModHelper.Fields.caveFogDepthOffset    = random.nextInt(9);
         }
 
         if (1 == currentTimeOfDay % 20) {
             /** - Initialize environment and player */
             PlayerEntity player = PlayerHelper.getPlayerFromGame();
-            String biomeName = "Unknown";
             Biome biome = null;
             double depth = 60;
             float light = 1.0F;
@@ -74,9 +66,6 @@ public abstract class WorldMixin {
 
                 if (null != this.dimension.biomeSource) {
                     biome = this.dimension.biomeSource.getBiome((int) Math.floor(player.x), (int) Math.floor(player.z));
-                    if (null != biome) {
-                        biomeName = biome.name;
-                    }
                 }
             }
 
@@ -151,12 +140,19 @@ public abstract class WorldMixin {
                 if ((64 - ModHelper.Fields.caveFogDepthOffset) > depth) {
                     caveFogInverted = (((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset)) * ((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset))) / 1024.0F;
                 }
+            }
 
+            if (Config.config.enableVoidFog) {
                 if (18 >= depth) {
-                    voidFog = (18.0F - (float)depth) / 18.0F;
-                    ModHelper.Fields.targetFogRed = 0.01F;
-                    ModHelper.Fields.targetFogGreen = 0.01F;
-                    ModHelper.Fields.targetFogBlue = 0.01F;
+                    if (0 > depth) {
+                        voidFog = 1.0F;
+                    } else {
+                        voidFog = (18.0F - (float)depth) / 18.0F;
+                    }
+                    float voidFogColorOffset = (1.0F - voidFog) * (1.0F - voidFog) * (1.0F - voidFog) * (1.0F - voidFog);
+                    ModHelper.Fields.targetFogRed   *= voidFogColorOffset;
+                    ModHelper.Fields.targetFogGreen *= voidFogColorOffset;
+                    ModHelper.Fields.targetFogBlue  *= voidFogColorOffset;
                 }
             }
 
@@ -192,36 +188,60 @@ public abstract class WorldMixin {
                                               + (voidFog * ModHelper.Fields.voidFogStrength);                      // Void Fog
         }
 
-        if (ModHelper.Fields.fogDensityMultiplier < (ModHelper.Fields.targetFogDensity - 0.001)) {
-            ModHelper.Fields.fogDensityMultiplier += 0.001F;
-        } else if (ModHelper.Fields.fogDensityMultiplier > (ModHelper.Fields.targetFogDensity + 0.001)) {
-            ModHelper.Fields.fogDensityMultiplier -= 0.001F;
+        if (FogApproachEnum.LINEAR == Config.config.fogApproachBehavior) {
+            ModHelper.Fields.fogDensityMultiplier = ModHelper.linearApproach (
+                    ModHelper.Fields.fogDensityMultiplier,
+                    ModHelper.Fields.targetFogDensity,
+                    0.001F
+            );
         } else {
-            ModHelper.Fields.fogDensityMultiplier = ModHelper.Fields.targetFogDensity;
+            ModHelper.Fields.fogDensityMultiplier = ModHelper.growthApproach (
+                    ModHelper.Fields.fogDensityMultiplier,
+                    ModHelper.Fields.targetFogDensity,
+                    0.02F
+            );
         }
 
-        if (ModHelper.Fields.fogRedMultiplier < (ModHelper.Fields.targetFogRed - 0.001)) {
-            ModHelper.Fields.fogRedMultiplier += 0.001F;
-        } else if (ModHelper.Fields.fogRedMultiplier > (ModHelper.Fields.targetFogRed + 0.001)) {
-            ModHelper.Fields.fogRedMultiplier -= 0.001F;
+        if (FogApproachEnum.LINEAR == Config.config.fogApproachBehavior) {
+            ModHelper.Fields.fogRedMultiplier = ModHelper.linearApproach (
+                    ModHelper.Fields.fogRedMultiplier,
+                    ModHelper.Fields.targetFogRed,
+                    0.001F
+            );
         } else {
-            ModHelper.Fields.fogRedMultiplier = ModHelper.Fields.targetFogRed;
+            ModHelper.Fields.fogRedMultiplier = ModHelper.growthApproach (
+                    ModHelper.Fields.fogRedMultiplier,
+                    ModHelper.Fields.targetFogRed,
+                    0.02F
+            );
         }
 
-        if (ModHelper.Fields.fogGreenMultiplier < (ModHelper.Fields.targetFogGreen - 0.001)) {
-            ModHelper.Fields.fogGreenMultiplier += 0.001F;
-        } else if (ModHelper.Fields.fogGreenMultiplier > (ModHelper.Fields.targetFogGreen + 0.001)) {
-            ModHelper.Fields.fogGreenMultiplier -= 0.001F;
+        if (FogApproachEnum.LINEAR == Config.config.fogApproachBehavior) {
+            ModHelper.Fields.fogGreenMultiplier = ModHelper.linearApproach (
+                    ModHelper.Fields.fogGreenMultiplier,
+                    ModHelper.Fields.targetFogGreen,
+                    0.001F
+            );
         } else {
-            ModHelper.Fields.fogGreenMultiplier = ModHelper.Fields.targetFogGreen;
+            ModHelper.Fields.fogGreenMultiplier = ModHelper.growthApproach (
+                    ModHelper.Fields.fogGreenMultiplier,
+                    ModHelper.Fields.targetFogGreen,
+                    0.02F
+            );
         }
 
-        if (ModHelper.Fields.fogBlueMultiplier < (ModHelper.Fields.targetFogBlue - 0.001)) {
-            ModHelper.Fields.fogBlueMultiplier += 0.001F;
-        } else if (ModHelper.Fields.fogBlueMultiplier > (ModHelper.Fields.targetFogBlue + 0.001)) {
-            ModHelper.Fields.fogBlueMultiplier -= 0.001F;
+        if (FogApproachEnum.LINEAR == Config.config.fogApproachBehavior) {
+            ModHelper.Fields.fogBlueMultiplier = ModHelper.linearApproach (
+                    ModHelper.Fields.fogBlueMultiplier,
+                    ModHelper.Fields.targetFogBlue,
+                    0.001F
+            );
         } else {
-            ModHelper.Fields.fogBlueMultiplier = ModHelper.Fields.targetFogBlue;
+            ModHelper.Fields.fogBlueMultiplier = ModHelper.growthApproach (
+                    ModHelper.Fields.fogBlueMultiplier,
+                    ModHelper.Fields.targetFogBlue,
+                    0.02F
+            );
         }
     }
 

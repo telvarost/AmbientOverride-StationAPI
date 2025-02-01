@@ -10,6 +10,18 @@ public class Config {
     public static class ConfigFields {
 
         @ConfigEntry(
+                name = "Approaching Fog Behavior",
+                description = "Linear = slow, Growth = exponential"
+        )
+        public FogApproachEnum fogApproachBehavior = FogApproachEnum.LINEAR;
+
+        @ConfigEntry(
+                name = "Allow Randomization",
+                description = "Values are applied statically when false"
+        )
+        public Boolean allowRandomization = true;
+
+        @ConfigEntry(
                 name = "Base Fog Intensity",
                 description = "Float value between 0.0 (0%) and 1.0 (100%)",
                 maxLength = 1
@@ -56,21 +68,24 @@ public class Config {
         )
         public Float morningFogMaxIntensity = 1.0F;
 
-        @ConfigEntry(name = "Void Fog Enabled")
-        public Boolean enableVoidFog = true;
-
-        @ConfigEntry(
-                name = "Void Fog Max Intensity",
-                description = "Float value between 0.0 (0%) and 1.0 (100%)",
-                maxLength = 1
-        )
-        public Float voidFogMaxIntensity = 1.0F;
-
         @ConfigEntry(
                 name = "Morning Fog Probability",
                 description = "Float value between 0.0 (0%) and 1.0 (100%)",
                 maxLength = 1
         )
         public Float morningFogProbability = 0.25F;
+
+        @ConfigEntry(
+                name = "Void Fog Enabled",
+                description = "Works best with growth fog behavior type"
+        )
+        public Boolean enableVoidFog = false;
+
+        @ConfigEntry(
+                name = "Void Fog Intensity",
+                description = "Float value between 0.0 (0%) and 1.0 (100%)",
+                maxLength = 1
+        )
+        public Float voidFogIntensity = 1.0F;
     }
 }
