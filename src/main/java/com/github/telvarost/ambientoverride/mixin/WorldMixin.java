@@ -157,7 +157,6 @@ public abstract class WorldMixin {
 
             /** - Get target cave fog density */
             float caveFogInverted = 1.0F;
-            float voidFog = 0.0F;
             if (Config.config.enableCaveDepthFog) {
                 if ((64 - ModHelper.Fields.caveFogDepthOffset) > depth) {
                     caveFogInverted = ( ((float) depth - (32 - ModHelper.Fields.caveFogDepthOffset))
@@ -166,6 +165,8 @@ public abstract class WorldMixin {
                 }
             }
 
+            /** - Get target void fog density */
+            float voidFog = 0.0F;
             if (Config.config.enableVoidFog) {
                 if (18 >= depth) {
                     if (0 > depth) {
